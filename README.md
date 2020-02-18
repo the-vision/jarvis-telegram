@@ -7,6 +7,13 @@ Just A Rather Very Intelligent System, now on Telegram!
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/the-vision/jarvis-telegram/master/LICENSE)
 [![first-timers-only](https://img.shields.io/badge/first--timers--only-friendly-blue.svg?style=flat-square)](https://www.firsttimersonly.com/)
 
+## Usage
+
+Open https://t.me/jarvis_chatbot and start a chat! Here are some supported queries:
+* show me a random xkcd comic
+
+## Setup
+
 ```python
 brew install python
 python -m venv venv
