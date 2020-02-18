@@ -21,9 +21,10 @@ server = Flask(__name__)
 @bot.message_handler(commands=['start'])
 def start(message):
     log(conn, 'start', None, message.text, message.from_user.id, None)
+    markup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+    markup.add(telebot.types.KeyboardButton('show me a random xkcd comic'))
     bot.reply_to(message, 'At your service, ' + message.from_user.first_name +
-                 '! 👋\nHere are some supported queries:' +
-                 '\n- show me a random xkcd comic')
+                 '! 👋', reply_markup=markup)
 
 
 @bot.message_handler(func=lambda message: True, content_types=['text'])
