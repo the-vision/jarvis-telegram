@@ -6,6 +6,7 @@ import json
 import os
 import psycopg2
 import requests
+import settings
 import telebot
 
 DB = os.environ.get('DATABASE_URL')

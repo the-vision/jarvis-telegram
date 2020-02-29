@@ -21,3 +21,5 @@ source venv/bin/activate
 pip install -r requirements.txt
 python bot.py
 ```
+
+Create a `.env` file following the template of the `example.env` file provided in the repository with your own tokens.
