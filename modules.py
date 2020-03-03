@@ -1,6 +1,7 @@
 from telebot import types
 
 import xkcd
+import random
 
 
 def reply(bot, message, intent, entities):
@@ -12,5 +13,12 @@ def reply(bot, message, intent, entities):
                        random_comic.getTitle() + '*\n' + random_comic.getAltText() +
                        '\n' + random_comic.getExplanation(), parse_mode='Markdown',
                        reply_to_message_id=message.message_id, reply_markup=markup)
+                       
+    greeting=['hello', 'hi', 'hey']
+    if intent in greeting:
+        reply = ['hello there !', 'hey', 'hi !', 'oh hello !']
+        text = random.choice(reply)
+        bot.send_message(message.chat.id, text,
+                       reply_to_message_id=message.message_id)
     else:
         bot.reply_to(message, message.text)
