@@ -14,8 +14,7 @@ def reply(bot, message, intent, entities):
                        '\n' + random_comic.getExplanation(), parse_mode='Markdown',
                        reply_to_message_id=message.message_id, reply_markup=markup)
                        
-    greeting=['hello', 'hi', 'hey']
-    if intent in greeting:
+    if intent == 'hello':
         reply = ['hello there !', 'hey', 'hi !', 'oh hello !']
         text = random.choice(reply)
         bot.send_message(message.chat.id, text,
