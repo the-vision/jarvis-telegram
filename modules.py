@@ -21,6 +21,11 @@ def reply(bot, message, intent, entities):
             'Oh hello!'
         ]
         greeting = random.choice(greetings)
-        bot.reply_to(message, greeting)                   
+        bot.reply_to(message, greeting)
     else:
-        bot.reply_to(message, message.text)
+        title = "Unhandled+query:+" + message.text
+        body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
+        markup = types.InlineKeyboardMarkup()
+        markup.add(types.InlineKeyboardButton(text='Report', url="https://github.com/the-vision/jarvis-telegram/issues/new?title=" + title + "&body=" + body))
+        bot.send_message(message.chat.id, text="Sorry, this feature isn't available yet!",
+                         parse_mode='Markdown', reply_to_message_id=message.message_id, reply_markup=markup)
