@@ -1,5 +1,6 @@
 from telebot import types
 
+import random
 import xkcd
 
 
@@ -12,10 +13,19 @@ def reply(bot, message, intent, entities):
                        random_comic.getTitle() + '*\n' + random_comic.getAltText() +
                        '\n' + random_comic.getExplanation(), parse_mode='Markdown',
                        reply_to_message_id=message.message_id, reply_markup=markup)
+    elif intent == 'hello':
+        greetings = [
+            'Hello there!',
+            'Hey!',
+            'Hi!',
+            'Oh hello!'
+        ]
+        greeting = random.choice(greetings)
+        bot.reply_to(message, greeting)
     else:
-        title = "Add+new+module+"+message.text
-        body = message.text+"+module+not+present"
-        markup = telebot.types.InlineKeyboardMarkup()
-        markup.add(telebot.types.InlineKeyboardButton(text = 'Report', url = "https://github.com/the-vision/jarvis-telegram/issues/new?title="+title+"&body="+body))    
-        bot.send_message(message.chat.id,text="Sorry, this feature isn't available yet!", 
-                        parse_mode='Markdown', reply_to_message_id=message.message_id, reply_markup=markup)
+        title = "Unhandled+query:+" + message.text
+        body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
+        markup = types.InlineKeyboardMarkup()
+        markup.add(types.InlineKeyboardButton(text='Report', url="https://github.com/the-vision/jarvis-telegram/issues/new?title=" + title + "&body=" + body))
+        bot.send_message(message.chat.id, text="Sorry, this feature isn't available yet!",
+                         parse_mode='Markdown', reply_to_message_id=message.message_id, reply_markup=markup)
