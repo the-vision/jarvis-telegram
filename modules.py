@@ -2,6 +2,7 @@ from telebot import types
 
 import random
 import xkcd
+import pyjokes
 
 
 def reply(bot, message, intent, entities):
@@ -13,6 +14,7 @@ def reply(bot, message, intent, entities):
                        random_comic.getTitle() + '*\n' + random_comic.getAltText() +
                        '\n' + random_comic.getExplanation(), parse_mode='Markdown',
                        reply_to_message_id=message.message_id, reply_markup=markup)
+
     elif intent == 'hello':
         greetings = [
             'Hello there!',
@@ -22,6 +24,10 @@ def reply(bot, message, intent, entities):
         ]
         greeting = random.choice(greetings)
         bot.reply_to(message, greeting)
+
+    elif intent == 'joke':
+        bot.reply_to(message,text=pyjokes.get_joke())
+
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
