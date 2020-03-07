@@ -14,12 +14,6 @@ def reply(bot, message, intent, entities):
                        random_comic.getTitle() + '*\n' + random_comic.getAltText() +
                        '\n' + random_comic.getExplanation(), parse_mode='Markdown',
                        reply_to_message_id=message.message_id, reply_markup=markup)
-    elif intent.lower() == 'fact':
-        response = requests.get('http://numbersapi.com/random/trivia')
-        if(response.status_code==200):
-            bot.reply_to(message, response.content)
-        else:
-            bot.reply_to(message, 'Something went wrong. Try again')
     elif intent.lower() == 'apod':
         response = requests.get(nasa_url)
         if(response.status_code==200):
