@@ -22,6 +22,11 @@ def reply(bot, message, intent, entities):
         ]
         greeting = random.choice(greetings)
         bot.reply_to(message, greeting)
+
+    elif intent =='bye':
+        bot.reply_to(message,'BYE! HAVE A GREAT DAY AHEAD.\nSEE YOU SOON.')
+        bot.send_animation(message.chat.id, 'https://media.giphy.com/media/UrcXN0zTfzTPi/giphy.gif')
+
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
