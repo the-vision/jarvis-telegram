@@ -13,7 +13,6 @@ def reply(bot, message, intent, entities):
                        random_comic.getTitle() + '*\n' + random_comic.getAltText() +
                        '\n' + random_comic.getExplanation(), parse_mode='Markdown',
                        reply_to_message_id=message.message_id, reply_markup=markup)
-
     elif intent == 'hello':
         greetings = [
             'Hello there!',
@@ -23,16 +22,14 @@ def reply(bot, message, intent, entities):
         ]
         greeting = random.choice(greetings)
         bot.reply_to(message, greeting)
-
     elif intent == 'coin':
         coin_images = {
-                        'heads': 'https://www.ssaurel.com/blog/wp-content/uploads/2017/01/heads.png',
-                        'tails': 'https://www.ssaurel.com/blog/wp-content/uploads/2017/01/tails.png'
-                    }
-        reply = coin_images[random.choice(['heads', 'tails'])]
-        bot.send_photo(message.chat.id,photo = reply,
+            'Heads': 'https://www.ssaurel.com/blog/wp-content/uploads/2017/01/heads.png',
+            'Tails': 'https://www.ssaurel.com/blog/wp-content/uploads/2017/01/tails.png'
+        }
+        result = random.choice(['Heads', 'Tails'])
+        bot.send_photo(message.chat.id, photo=coin_images[result],
                        reply_to_message_id=message.message_id)
-
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
