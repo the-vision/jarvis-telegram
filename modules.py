@@ -25,7 +25,7 @@ def reply(bot, message, intent, entities):
     elif intent == 'bye':
         greetings = [
             'Bye!',
-            'have a great day ahead!',
+            'Have a great day ahead!',
             'See you soon!'
         ]
         greeting = random.choice(greetings)
