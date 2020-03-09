@@ -22,6 +22,8 @@ def reply(bot, message, intent, entities):
         ]
         greeting = random.choice(greetings)
         bot.reply_to(message, greeting)
+     elif intent =='thanks':
+        bot.reply_to(message,'Thanks for taking our service! Have a great day ahead\nSee You Soon.')
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
