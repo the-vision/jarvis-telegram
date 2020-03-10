@@ -38,6 +38,14 @@ def reply(bot, message, intent, entities):
         result = random.choice(['Heads', 'Tails'])
         bot.send_photo(message.chat.id, photo=coin_images[result],
                        reply_to_message_id=message.message_id)
+    elif intent[:9] == 'translate':
+        word = message.text[9:]
+        markup = telebot.types.InlineKeyboardMarkup()
+        markup.add(telebot.types.InlineKeyboardButton(text='Spanish', url="https://translate.google.co.in/#view=home&op=translate&sl=en&tl=es&text="+word)) 
+        markup.add(telebot.types.InlineKeyboardButton(text='Japanese', url="https://translate.google.co.in/#view=home&op=translate&sl=en&tl=ja&text="+word)) 
+        markup.add(telebot.types.InlineKeyboardButton(text='Russian', url="https://translate.google.co.in/#view=home&op=translate&sl=en&tl=ru&text="+word))      
+        bot.send_message(message.chat.id,text="Translate to :", parse_mode='Markdown',
+                       reply_to_message_id=message.message_id, reply_markup=markup)
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
