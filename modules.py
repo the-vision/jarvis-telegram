@@ -38,6 +38,18 @@ def reply(bot, message, intent, entities):
         result = random.choice(['Heads', 'Tails'])
         bot.send_photo(message.chat.id, photo=coin_images[result],
                        reply_to_message_id=message.message_id)
+    elif intent == 'dice':
+        dice_sides = {
+            '1': 'https://www.ssaurel.com/blog/wp-content/uploads/2017/05/dice_1.png',
+            '2': 'https://www.ssaurel.com/blog/wp-content/uploads/2017/05/dice_2.png',
+            '3': 'https://www.ssaurel.com/blog/wp-content/uploads/2017/05/dice_3.png',
+            '4': 'https://www.ssaurel.com/blog/wp-content/uploads/2017/05/dice_4.png',
+            '5': 'https://www.ssaurel.com/blog/wp-content/uploads/2017/05/dice_5.png',
+            '6': 'https://www.ssaurel.com/blog/wp-content/uploads/2017/05/dice_6.png'
+                    }
+        reply = dice_sides[random.choice(['1','2','3','4','5','6'])]
+        bot.send_photo(message.chat.id,photo = reply,
+                       reply_to_message_id=message.message_id)
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
