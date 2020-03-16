@@ -1,5 +1,6 @@
 from telebot import types
 
+import pyjokes
 import random
 import xkcd
 
@@ -38,6 +39,8 @@ def reply(bot, message, intent, entities):
         result = random.choice(['Heads', 'Tails'])
         bot.send_photo(message.chat.id, photo=coin_images[result],
                        reply_to_message_id=message.message_id)
+    elif intent == 'joke':
+        bot.reply_to(message, text=pyjokes.get_joke())
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
