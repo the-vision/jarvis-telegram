@@ -38,7 +38,8 @@ def reply(bot, message, intent, entities):
             'Tails': 'https://www.ssaurel.com/blog/wp-content/uploads/2017/01/tails.png'
         }
         result = random.choice(['Heads', 'Tails'])
-        bot.send_photo(message.chat.id, photo=coin_images[result])
+        bot.send_photo(message.chat.id, photo=coin_images[result],
+                       reply_to_message_id=message.message_id))
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
