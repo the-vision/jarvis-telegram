@@ -35,16 +35,10 @@ def reply(bot, message, intent, entities):
     elif intent == 'coin':
         coin_images = {
             'Heads': 'https://www.ssaurel.com/blog/wp-content/uploads/2017/01/heads.png',
-            'Tails': 'https://www.ssaurel.com/blog/wp-content/uploads/2017/01/tails.png',
-            'coin_flip' : 'https://i.gifer.com/2dZY.gif'
+            'Tails': 'https://www.ssaurel.com/blog/wp-content/uploads/2017/01/tails.png'
         }
-        result = random.choice(['Heads', 'Tails', 'coin_flip'])
-        if result == 'coin_flip' :
-            bot.send_animation(message.chat.id, animation=coin_images[result],
-                       reply_to_message_id=message.message_id)
-        else:
-            bot.send_photo(message.chat.id, photo=coin_images[result],
-                       reply_to_message_id=message.message_id)
+        result = random.choice(['Heads', 'Tails'])
+        bot.send_photo(message.chat.id, photo=coin_images[result])
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
