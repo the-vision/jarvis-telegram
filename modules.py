@@ -24,6 +24,8 @@ def reply(bot, message, intent, entities):
         ]
         greeting = random.choice(greetings)
         bot.reply_to(message, greeting)
+    elif intent == 'thanks':
+        bot.reply_to(message, u'\u2764')
     elif intent == 'bye':
         greetings = [
             'Bye!',
