@@ -39,7 +39,7 @@ def reply(bot, message, intent, entities):
         }
         result = random.choice(['Heads', 'Tails'])
         bot.send_photo(message.chat.id, photo=coin_images[result],
-                       reply_to_message_id=message.message_id))
+                       reply_to_message_id=message.message_id)
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
