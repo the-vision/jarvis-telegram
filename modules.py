@@ -2,6 +2,7 @@ from telebot import types
 
 import pyjokes
 import random
+import requests
 import xkcd
 
 
@@ -41,6 +42,12 @@ def reply(bot, message, intent, entities):
                        reply_to_message_id=message.message_id)
     elif intent == 'joke':
         bot.reply_to(message, text=pyjokes.get_joke())
+    elif intent == 'fact':
+        response = requests.get('http://numbersapi.com/random/trivia')
+        if (response.status_code == 200):
+            bot.reply_to(message, response.text)
+        else:
+            bot.reply_to(message, 'I could not fetch a fact for you this time. Please try again later!')
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
