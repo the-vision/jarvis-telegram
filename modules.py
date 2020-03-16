@@ -5,6 +5,7 @@ import random
 import requests
 import xkcd
 
+
 def reply(bot, message, intent, entities):
     if intent == 'xkcd':
         random_comic = xkcd.getRandomComic()
