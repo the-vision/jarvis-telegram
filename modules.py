@@ -1,6 +1,8 @@
 from telebot import types
 
+import pyjokes
 import random
+import requests
 import xkcd
 
 
@@ -22,14 +24,17 @@ def reply(bot, message, intent, entities):
         ]
         greeting = random.choice(greetings)
         bot.reply_to(message, greeting)
+    elif intent == 'thanks':
+        bot.reply_to(message, u'\u2764')
     elif intent == 'bye':
         greetings = [
             'Bye!',
-            'have a great day ahead!',
+            'Have a great day ahead!',
             'See you soon!'
         ]
         greeting = random.choice(greetings)
         bot.reply_to(message, greeting)
+        bot.send_animation(message.chat.id, 'https://media.giphy.com/media/UrcXN0zTfzTPi/giphy.gif')
     elif intent == 'coin':
         coin_images = {
             'Heads': 'https://www.ssaurel.com/blog/wp-content/uploads/2017/01/heads.png',
@@ -50,6 +55,14 @@ def reply(bot, message, intent, entities):
         reply = dice_sides[random.choice(['1','2','3','4','5','6'])]
         bot.send_photo(message.chat.id,photo = reply,
                        reply_to_message_id=message.message_id)
+    elif intent == 'joke':
+        bot.reply_to(message, text=pyjokes.get_joke())
+    elif intent == 'fact':
+        response = requests.get('http://numbersapi.com/random/trivia')
+        if (response.status_code == 200):
+            bot.reply_to(message, response.text)
+        else:
+            bot.reply_to(message, 'I could not fetch a fact for you this time. Please try again later!')
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
