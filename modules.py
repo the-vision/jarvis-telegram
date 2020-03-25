@@ -34,8 +34,12 @@ def reply(bot, message, intent, entities):
         ]
         greeting = random.choice(greetings)
         bot.reply_to(message, greeting)
-        ani = random.choice(['https://media.giphy.com/media/UrcXN0zTfzTPi/giphy.gif','https://media.giphy.com/media/3o6EhGvKschtbrRjX2/giphy.gif'])
-        bot.send_animation(message.chat.id, ani)
+        gifs = [
+            'https://media.giphy.com/media/UrcXN0zTfzTPi/giphy.gif',
+            'https://media.giphy.com/media/3o6EhGvKschtbrRjX2/giphy.gif'
+        ]
+        gif = random.choice(gifs)
+        bot.send_animation(message.chat.id, gif)
     elif intent == 'coin':
         coin_images = {
             'Heads': 'https://www.ssaurel.com/blog/wp-content/uploads/2017/01/heads.png',
