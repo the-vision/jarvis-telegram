@@ -39,7 +39,7 @@ def reply(bot, message, intent, entities):
         bot.send_photo(message.chat.id, photo=coin_images[result],
                        reply_to_message_id=message.message_id)
     elif intent == 'translate':
-        word = entities[0][text]
+        word = entities[0]['text']
         markup = types.InlineKeyboardMarkup()
         markup.add(types.InlineKeyboardButton(text='Spanish', url="https://translate.google.co.in/#view=home&op=translate&sl=en&tl=es&text="+word)) 
         markup.add(types.InlineKeyboardButton(text='Japanese', url="https://translate.google.co.in/#view=home&op=translate&sl=en&tl=ja&text="+word)) 
