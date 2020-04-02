@@ -1,0 +1,6 @@
+{
+    "python.pythonPath": "/home/devaditya/anaconda3/envs/jarvis-telegram/bin/python",
+    "python.linting.pylintEnabled": false,
+    "python.linting.pycodestyleEnabled": false,
+    "python.linting.enabled": true
+}
