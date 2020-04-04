@@ -4,7 +4,7 @@ import pyjokes
 import random
 import requests
 import xkcd
-
+WORDS_API_KEY = "Your Key Here"      # Get your free API from: https://rapidapi.com/community/api/urban-dictionary
 
 def reply(bot, message, intent, entities):
     if intent == 'xkcd':
@@ -68,6 +68,13 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, response.text)
         else:
             bot.reply_to(message, 'I could not fetch a fact for you this time. Please try again later!')
+    elif intent == 'dictionary':
+        word = entities['text'][0]['value']
+        response = requests.get('https://wordsapiv1.p.mashape.com/words/' + word + '/definitions', headers={
+                'X-Mashape-Key': WORDS_API_KEY
+            })
+        data = response.json()
+        bot.reply_to(message, text=data['definitions'][0]['definition'])
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
