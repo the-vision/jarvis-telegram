@@ -4,6 +4,7 @@ import pyjokes
 import random
 import requests
 import xkcd
+import wikipedia
 
 
 def reply(bot, message, intent, entities):
@@ -68,6 +69,17 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, response.text)
         else:
             bot.reply_to(message, 'I could not fetch a fact for you this time. Please try again later!')
+    elif intent == 'wiki':
+        query = entities['wiki'][0]['value']
+        try:
+            data = wikipedia.page(query)
+            bot.send_message(message.chat.id, text='*' +
+                       data.title + '*\n' + data.summary +
+                       '\n' + data.url,parse_mode='Markdown')
+        except wikipedia.exceptions.DisambiguationError:
+            wiki_image = 'https://en.wikipedia.org/static/images/project-logos/enwiki-2x.png'
+            bot.send_photo(message.chat.id, wiki_image, caption='https://en.wikipedia.org/wiki/'+query,parse_mode='Markdown')
+
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
