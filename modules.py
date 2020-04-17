@@ -4,7 +4,9 @@ import pyjokes
 import random
 import requests
 import xkcd
+import os
 
+NEWS_API_KEY = os.environ.get('NEWS_API_KEY')
 
 def reply(bot, message, intent, entities):
     if intent == 'xkcd':
@@ -68,6 +70,17 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, response.text)
         else:
             bot.reply_to(message, 'I could not fetch a fact for you this time. Please try again later!')
+    elif intent == 'news':
+        response = requests.get('https://newsapi.org/v1/articles?source=google-news&apiKey='+ NEWS_API_KEY)
+        data = response.json()
+        for article in data['articles']:
+            title = article['title']
+            description = article['description']
+            url = article['url']
+            url_to_image = article['urlToImage']
+            bot.send_photo(message.chat.id, url_to_image, caption='*' +
+                            title + '*\n'  +
+                            '\n' + description +'\n'+url, parse_mode='Markdown')
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
