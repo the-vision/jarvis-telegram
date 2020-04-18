@@ -4,6 +4,7 @@ import pyjokes
 import random
 import requests
 import xkcd
+import datetime
 
 
 def reply(bot, message, intent, entities):
@@ -68,6 +69,9 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, response.text)
         else:
             bot.reply_to(message, 'I could not fetch a fact for you this time. Please try again later!')
+    elif intent == 'time':
+        currentDT = datetime.datetime.now()
+        bot.reply_to(message, 'The current time is: '+ currentDT.strftime("%I:%M:%S %p"))
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
