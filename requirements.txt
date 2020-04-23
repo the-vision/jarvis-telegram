@@ -13,6 +13,7 @@ pyTelegramBotAPI==3.6.7
 python-dotenv==0.12.0
 requests==2.21.0
 six==1.12.0
+unit-convert==1.0.0
 urllib3==1.24.1
 Werkzeug==0.14.1
 xkcd==2.4.2

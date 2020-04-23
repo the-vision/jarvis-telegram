@@ -4,7 +4,7 @@ import pyjokes
 import random
 import requests
 import xkcd
-
+from unit_convert import UnitConvert
 
 def reply(bot, message, intent, entities):
     if intent == 'xkcd':
@@ -68,6 +68,19 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, response.text)
         else:
             bot.reply_to(message, 'I could not fetch a fact for you this time. Please try again later!')
+    elif intent == 'unit':
+        from_value = entities['value']
+        from_unit = entities['from_unit']
+        to_unit = entities['to_unit']
+        url = "https://community-neutrino-currency-conversion.p.rapidapi.com/convert"
+        payload = "from-type=NZD&to-type=GBP&from-value=10"
+        headers = {
+            'x-rapidapi-host': "community-neutrino-currency-conversion.p.rapidapi.com",
+            'x-rapidapi-key': "<KEY>",                                             # Get your key from https://rapidapi.com/neutrinoapi/api/convert-1
+            'content-type': "application/x-www-form-urlencoded"
+            }
+        response = requests.request("POST", url, data=payload, headers=headers)
+        bot.reply_to(message, response.text['result'])
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
