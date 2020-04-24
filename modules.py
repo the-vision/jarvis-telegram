@@ -5,7 +5,7 @@ import random
 import requests
 import xkcd
 
-
+CURRENCY_API_KEY = 'GET IT FROM https://fixer.io/'
 def reply(bot, message, intent, entities):
     if intent == 'xkcd':
         random_comic = xkcd.getRandomComic()
@@ -68,6 +68,16 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, response.text)
         else:
             bot.reply_to(message, 'I could not fetch a fact for you this time. Please try again later!')
+    elif intent == 'currency':
+        amount = entities[0]['amount'][0]['value']
+        from_currency = entities[0]['from_currency'][0]['value'].upper()
+        to_currency = entities[0]['to_currency'][0]['value'].upper()
+        r = requests.get('http://data.fixer.io/api/latest?access_key='+CURRENCY_API_KEY)
+        data = r.json()
+        from_rate = data['rates'][from_currency]
+        to_rate = data['rates'][to_currency]
+        converted = round(amount*(to_rate/from_rate),2)
+        bot.reply_to(message, converted)
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
