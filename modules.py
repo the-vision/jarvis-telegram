@@ -1,11 +1,15 @@
 from telebot import types
 
+import os
 import pyjokes
 import random
 import requests
 import xkcd
 
 CURRENCY_API_KEY = 'GET IT FROM https://fixer.io/'
+RAPID_API_KEY = os.environ.get('RAPID_API_KEY')
+
+
 def reply(bot, message, intent, entities):
     if intent == 'xkcd':
         random_comic = xkcd.getRandomComic()
@@ -78,6 +82,16 @@ def reply(bot, message, intent, entities):
         to_rate = data['rates'][to_currency]
         converted = round(amount*(to_rate/from_rate),2)
         bot.reply_to(message, converted)
+    elif intent == 'dictionary':
+        word = entities[0]['value']
+        response = requests.get('https://wordsapiv1.p.rapidapi.com/words/' + word + '/definitions', headers={
+            'x-rapidapi-key': RAPID_API_KEY
+        })
+        data = response.json()
+        if (response.status_code == 200):
+            bot.reply_to(message, data['definitions'][0]['definition'])
+        else:
+            bot.reply_to(message, data['message'])
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
