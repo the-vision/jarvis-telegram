@@ -1,9 +1,12 @@
 from telebot import types
 
+import os
 import pyjokes
 import random
 import requests
 import xkcd
+
+RAPID_API_KEY = os.environ.get('RAPID_API_KEY')
 
 
 def reply(bot, message, intent, entities):
@@ -68,6 +71,16 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, response.text)
         else:
             bot.reply_to(message, 'I could not fetch a fact for you this time. Please try again later!')
+    elif intent == 'dictionary':
+        word = entities[0]['value']
+        response = requests.get('https://wordsapiv1.p.rapidapi.com/words/' + word + '/definitions', headers={
+            'x-rapidapi-key': RAPID_API_KEY
+        })
+        data = response.json()
+        if (response.status_code == 200):
+            bot.reply_to(message, data['definitions'][0]['definition'])
+        else:
+            bot.reply_to(message, data['message'])
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
