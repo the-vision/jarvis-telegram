@@ -7,6 +7,7 @@ import requests
 import xkcd
 
 RAPID_API_KEY = os.environ.get('RAPID_API_KEY')
+WEATHER_API_KEY = 'GET FREE API FROM https://weatherstack.com/'
 
 
 def reply(bot, message, intent, entities):
@@ -81,6 +82,12 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, data['definitions'][0]['definition'])
         else:
             bot.reply_to(message, data['message'])
+    elif intent == 'weather':
+        location = entities[0]['value']
+        r = requests.get('http://api.weatherstack.com/current?access_key='+WEATHER_API_KEY+'&query='+location)
+        data = r.json()
+        text = 'The temperature is'+data['current']['temperature']+'\nYou\'ll enjoy a'+data['current'] ['weather_descriptions']+'day.'
+        bot.reply_to(message, text)
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
