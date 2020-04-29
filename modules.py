@@ -81,6 +81,15 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, data['definitions'][0]['definition'])
         else:
             bot.reply_to(message, data['message'])
+    elif intent == 'anime':
+        anime = entities[0]['value']
+        r = requests.get('https://kitsu.io/api/edge/anime', params={
+                'filter[text]': anime,
+                'page[limit]': 1
+            })
+        req = r.json()
+        data = req['data'][0]['attributes']
+        bot.reply_to(message, text=data['canonicalTitle']+'\n'+data['synopsis']+'\n'+'No. of episodes:'+str(data['episodeCount'])+'\n'+'https://kitsu.io/anime/'+ data['slug'])
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
