@@ -81,6 +81,12 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, data['definitions'][0]['definition'])
         else:
             bot.reply_to(message, data['message'])
+    elif intent == 'meme':
+        url = "https://meme-api.herokuapp.com/gimme/memes"
+        res = requests.get(url)
+        data=res.json()
+        imgurl=data['url']
+        bot.send_photo(message.chat.id, imgurl, parse_mode='Markdown')
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
