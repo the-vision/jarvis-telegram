@@ -24,6 +24,7 @@ def start(message):
     log(conn, 'start', None, message.text, message.from_user.id, None)
     markup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     markup.add(telebot.types.KeyboardButton('show me a random xkcd comic'))
+    markup.add(telebot.types.KeyboardButton('show me a meme'))
     bot.reply_to(message, 'At your service, ' + message.from_user.first_name +
                  '! 👋', reply_markup=markup)
 
