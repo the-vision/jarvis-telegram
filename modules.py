@@ -81,6 +81,16 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, data['definitions'][0]['definition'])
         else:
             bot.reply_to(message, data['message'])
+    elif intent == 'meme':
+        response = requests.get('https://meme-api.herokuapp.com/gimme/memes')
+        if (response.status_code == 200):
+            data = response.json()
+            markup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+            markup.add(telebot.types.KeyboardButton('Check out another meme!'))
+            bot.send_photo(message.chat.id, data['url'], caption='*' + data['title'] + '*', parse_mode='Markdown',
+                           reply_to_message_id=message.message_id, reply_markup=markup)
+        else:
+            bot.reply_to(message, 'I could not fetch a meme for you this time. Please try again later!')
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
