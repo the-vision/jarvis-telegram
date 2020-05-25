@@ -85,8 +85,8 @@ def reply(bot, message, intent, entities):
         response = requests.get('https://meme-api.herokuapp.com/gimme/memes')
         if (response.status_code == 200):
             data = response.json()
-            markup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-            markup.add(telebot.types.KeyboardButton('Check out another meme!'))
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            markup.add(types.KeyboardButton('Check out another meme!'))
             bot.send_photo(message.chat.id, data['url'], caption='*' + data['title'] + '*', parse_mode='Markdown',
                            reply_to_message_id=message.message_id, reply_markup=markup)
         else:
