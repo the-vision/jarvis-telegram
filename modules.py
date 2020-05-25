@@ -81,6 +81,16 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, data['definitions'][0]['definition'])
         else:
             bot.reply_to(message, data['message'])
+    elif intent == 'motivation':
+        url = "https://type.fit/api/quotes"
+        r=requests.get(url)
+        data=r.json()
+        quotes_list=[]
+        for i in data:
+            quotes_list.append(i)
+        i=random.randint(1,1643)
+        text=quotes_list[i]['text']
+        bot.reply_to(message,text)
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
