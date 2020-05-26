@@ -83,13 +83,14 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, data['message'])
     elif intent == 'anime':
         anime = entities[0]['value']
-        r = requests.get('https://kitsu.io/api/edge/anime', params={
-                'filter[text]': anime,
-                'page[limit]': 1
-            })
-        req = r.json()
-        data = req['data'][0]['attributes']
-        bot.reply_to(message, text=data['canonicalTitle']+'\n'+data['synopsis']+'\n'+'No. of episodes:'+str(data['episodeCount'])+'\n'+'https://kitsu.io/anime/'+ data['slug'])
+        response = requests.get('https://jikan1.p.rapidapi.com/search/anime', headers={
+            'x-rapidapi-key': RAPID_API_KEY
+        }, params={
+            'q': anime
+        })
+        data = response.json()
+        bot.send_photo(message.chat.id, data['results'][0]['image_url'], caption='*' + data['results'][0]['title'] + '*\n' + data['results'][0]['synopsis'] + '\n\nRating: ' + str(data['results'][0]['score']) + '\nNumber of episodes: ' + str(data['results'][0]['episodes']),
+                       parse_mode='Markdown', reply_to_message_id=message.message_id)
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
