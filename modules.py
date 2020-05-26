@@ -4,6 +4,7 @@ import os
 import pyjokes
 import random
 import requests
+import wikipedia
 import xkcd
 
 RAPID_API_KEY = os.environ.get('RAPID_API_KEY')
@@ -71,6 +72,14 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, response.text)
         else:
             bot.reply_to(message, 'I could not fetch a fact for you this time. Please try again later!')
+    elif intent == 'wiki':
+        try:
+            query = entities[0]['value']
+            data = wikipedia.summary(query, sentences=5)
+            bot.reply_to(message, data)
+        except Exception as e:
+            print(e)
+            bot.reply_to(message, 'I could not fetch the Wikipedia summary for you this time. Please try again later!')
     elif intent == 'dictionary':
         word = entities[0]['value']
         response = requests.get('https://wordsapiv1.p.rapidapi.com/words/' + word + '/definitions', headers={
@@ -98,6 +107,7 @@ def reply(bot, message, intent, entities):
 - roll a dice
 - tell me a joke
 - define server
+- cloud wiki
 \nI'm always learning, so do come back and say hi from time to time! Have a nice day. 🙂"""
         bot.reply_to(message, help_message)
     else:
