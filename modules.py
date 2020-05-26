@@ -1,10 +1,13 @@
 from telebot import types
 
+import os
 import pyjokes
 import random
 import requests
 import wikipedia
 import xkcd
+
+RAPID_API_KEY = os.environ.get('RAPID_API_KEY')
 
 
 def reply(bot, message, intent, entities):
@@ -77,6 +80,35 @@ def reply(bot, message, intent, entities):
         except Exception as e:
             print(e)
             bot.reply_to(message, 'I could not fetch the Wikipedia summary for you this time. Please try again later!')
+    elif intent == 'dictionary':
+        word = entities[0]['value']
+        response = requests.get('https://wordsapiv1.p.rapidapi.com/words/' + word + '/definitions', headers={
+            'x-rapidapi-key': RAPID_API_KEY
+        })
+        data = response.json()
+        if (response.status_code == 200):
+            bot.reply_to(message, data['definitions'][0]['definition'])
+        else:
+            bot.reply_to(message, data['message'])
+    elif intent == 'meme':
+        response = requests.get('https://meme-api.herokuapp.com/gimme/memes')
+        if (response.status_code == 200):
+            data = response.json()
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            markup.add(types.KeyboardButton('Check out another meme!'))
+            bot.send_photo(message.chat.id, data['url'], caption='*' + data['title'] + '*', parse_mode='Markdown',
+                           reply_to_message_id=message.message_id, reply_markup=markup)
+        else:
+            bot.reply_to(message, 'I could not fetch a meme for you this time. Please try again later!')
+    elif intent == 'help':
+        help_message = """Hi there! I'm Jarvis, your personal assistant.\n\nYou can tell me things like:
+- show me a xkcd comic
+- flip a coin
+- roll a dice
+- tell me a joke
+- define server
+\nI'm always learning, so do come back and say hi from time to time! Have a nice day. 🙂"""
+        bot.reply_to(message, help_message)
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
