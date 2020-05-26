@@ -90,6 +90,16 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, data['definitions'][0]['definition'])
         else:
             bot.reply_to(message, data['message'])
+    elif intent == 'anime':
+        anime = entities[0]['value']
+        response = requests.get('https://jikan1.p.rapidapi.com/search/anime', headers={
+            'x-rapidapi-key': RAPID_API_KEY
+        }, params={
+            'q': anime
+        })
+        data = response.json()
+        bot.send_photo(message.chat.id, data['results'][0]['image_url'], caption='*' + data['results'][0]['title'] + '*\n' + data['results'][0]['synopsis'] + '\n\nRating: ' + str(data['results'][0]['score']) + '\nNumber of episodes: ' + str(data['results'][0]['episodes']),
+                       parse_mode='Markdown', reply_to_message_id=message.message_id)
     elif intent == 'meme':
         response = requests.get('https://meme-api.herokuapp.com/gimme/memes')
         if (response.status_code == 200):
@@ -108,6 +118,7 @@ def reply(bot, message, intent, entities):
 - tell me a joke
 - define server
 - cloud wiki
+- death note anime
 \nI'm always learning, so do come back and say hi from time to time! Have a nice day. 🙂"""
         bot.reply_to(message, help_message)
     else:
