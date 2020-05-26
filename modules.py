@@ -91,6 +91,15 @@ def reply(bot, message, intent, entities):
                            reply_to_message_id=message.message_id, reply_markup=markup)
         else:
             bot.reply_to(message, 'I could not fetch a meme for you this time. Please try again later!')
+    elif intent == 'help':
+        help_message = """Hi there! I'm Jarvis, your personal assistant.\n\nYou can tell me things like:
+- show me a xkcd comic
+- flip a coin
+- roll a dice
+- tell me a joke
+- define server
+\nI'm always learning, so do come back and say hi from time to time! Have a nice day. 🙂"""
+        bot.reply_to(message, help_message)
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
