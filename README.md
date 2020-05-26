@@ -22,4 +22,6 @@ pip install -r requirements.txt
 python bot.py
 ```
 
-Create a `.env` file following the template of the `example.env` file provided in the repository with your own tokens.
+Create a `.env` file following the template of the `example.env` file provided in the repository with your own tokens. Here's a detailed document containing step-by-step instructions to get your own bot working locally: [SETUP](SETUP.md)
+
+Before contributing to this project do check [CONTRIBUTING.md](https://github.com/the-vision/jarvis-telegram/blob/master/CONTRIBUTING.md) file
