@@ -118,6 +118,7 @@ def reply(bot, message, intent, entities):
 - tell me a joke
 - define server
 - cloud wiki
+- death note anime
 \nI'm always learning, so do come back and say hi from time to time! Have a nice day. 🙂"""
         bot.reply_to(message, help_message)
     else:
