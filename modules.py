@@ -8,7 +8,6 @@ import requests
 import wikipedia
 import xkcd
 
-CURRENCY_API_KEY = 'GET IT FROM https://fixer.io/'
 RAPID_API_KEY = os.environ.get('RAPID_API_KEY')
 
 
@@ -89,15 +88,22 @@ def reply(bot, message, intent, entities):
         else:
             bot.reply_to(message, 'I could not fetch a fact for you this time. Please try again later!')
     elif intent == 'currency':
-        amount = entities[0]['amount'][0]['value']
-        from_currency = entities[0]['from_currency'][0]['value'].upper()
-        to_currency = entities[0]['to_currency'][0]['value'].upper()
-        r = requests.get('http://data.fixer.io/api/latest?access_key='+CURRENCY_API_KEY)
-        data = r.json()
-        from_rate = data['rates'][from_currency]
-        to_rate = data['rates'][to_currency]
-        converted = round(amount*(to_rate/from_rate),2)
-        bot.reply_to(message, converted)
+        try:
+            amount = entities[0]['value']
+            from_currency = entities[1]['value'].upper()
+            to_currency = entities[2]['value'].upper()
+            response = requests.get('https://currency23.p.rapidapi.com/exchange', headers={
+                'x-rapidapi-key': RAPID_API_KEY
+            }, params={
+                'int': amount,
+                'base': from_currency,
+                'to': to_currency
+            })
+            data = response.json()
+            bot.reply_to(message, amount + ' ' + from_currency + ' = ' + data['result']['data'][0]['calculatedstr'] + ' ' + to_currency)
+        except Exception as e:
+            print(e)
+            bot.reply_to(message, 'I could not convert the currency for you this time. Please try again later!')
     elif intent == 'time':
         time = datetime.datetime.utcnow()
         bot.reply_to(message, 'The Coordinated Universal Time is '+ time.strftime("%I:%M:%S %p on %A, %d %b %Y."))
@@ -148,6 +154,7 @@ def reply(bot, message, intent, entities):
 - define server
 - cloud wiki
 - death note anime
+- 50 EUR to USD
 \nI'm always learning, so do come back and say hi from time to time! Have a nice day. 🙂"""
         bot.reply_to(message, help_message)
     else:
