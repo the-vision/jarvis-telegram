@@ -1,5 +1,6 @@
 from telebot import types
 
+import datetime
 import os
 import pyjokes
 import random
@@ -86,6 +87,9 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, response.text)
         else:
             bot.reply_to(message, 'I could not fetch a fact for you this time. Please try again later!')
+    elif intent == 'time':
+        time = datetime.datetime.utcnow()
+        bot.reply_to(message, 'The Coordinated Universal Time is '+ time.strftime("%I:%M:%S %p on %A, %d %b %Y."))
     elif intent == 'wiki':
         try:
             query = entities[0]['value']
