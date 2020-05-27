@@ -1,10 +1,10 @@
 from telebot import types
 
+import datetime
 import pyjokes
 import random
 import requests
 import xkcd
-import datetime
 
 
 def reply(bot, message, intent, entities):
@@ -70,8 +70,8 @@ def reply(bot, message, intent, entities):
         else:
             bot.reply_to(message, 'I could not fetch a fact for you this time. Please try again later!')
     elif intent == 'time':
-        currentDT = datetime.datetime.now()
-        bot.reply_to(message, 'The current time is: '+ currentDT.strftime("%I:%M:%S %p"))
+        time = datetime.datetime.utcnow()
+        bot.reply_to(message, 'The Coordinated Universal Time is '+ time.strftime("%I:%M:%S %p on %A, %d %b %Y."))
     else:
         title = "Unhandled+query:+" + message.text
         body = "What's+the+expected+result?+PLACEHOLDER_TEXT"
