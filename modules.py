@@ -87,6 +87,23 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, response.text)
         else:
             bot.reply_to(message, 'I could not fetch a fact for you this time. Please try again later!')
+    elif intent == 'currency':
+        try:
+            amount = entities[0]['value']
+            from_currency = entities[1]['value'].upper()
+            to_currency = entities[2]['value'].upper()
+            response = requests.get('https://currency23.p.rapidapi.com/exchange', headers={
+                'x-rapidapi-key': RAPID_API_KEY
+            }, params={
+                'int': amount,
+                'base': from_currency,
+                'to': to_currency
+            })
+            data = response.json()
+            bot.reply_to(message, amount + ' ' + from_currency + ' = ' + data['result']['data'][0]['calculatedstr'] + ' ' + to_currency)
+        except Exception as e:
+            print(e)
+            bot.reply_to(message, 'I could not convert the currency for you this time. Please try again later!')
     elif intent == 'time':
         time = datetime.datetime.utcnow()
         bot.reply_to(message, 'The Coordinated Universal Time is '+ time.strftime("%I:%M:%S %p on %A, %d %b %Y."))
@@ -137,6 +154,7 @@ def reply(bot, message, intent, entities):
 - define server
 - cloud wiki
 - death note anime
+- 50 EUR to USD
 \nI'm always learning, so do come back and say hi from time to time! Have a nice day. 🙂"""
         bot.reply_to(message, help_message)
     else:
