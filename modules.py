@@ -1,5 +1,6 @@
 from telebot import types
 
+import datetime
 import os
 import pyjokes
 import random
@@ -53,6 +54,20 @@ def reply(bot, message, intent, entities):
         result = random.choice(['Heads', 'Tails'])
         bot.send_photo(message.chat.id, photo=coin_images[result],
                        reply_to_message_id=message.message_id)
+    elif intent == 'translate':
+        try:
+            text = entities[0]['value']
+            response = requests.post('https://google-translate1.p.rapidapi.com/language/translate/v2', headers={
+                'x-rapidapi-key': RAPID_API_KEY,
+                'accept-encoding': 'application/gzip',
+                'content-type': 'application/x-www-form-urlencoded'
+            }, data='source=en&q=' + text + '&target=es')
+            data = response.json()
+            print(data)
+            bot.reply_to(message, 'Here is the Spanish translation: ' + data['data']['translations'][0]['translatedText'])
+        except Exception as e:
+            print(e)
+            bot.reply_to(message, 'I could not fetch the translation for you this time. Please try again later!')
     elif intent == 'dice':
         dice_images = {
             '1': 'https://www.ssaurel.com/blog/wp-content/uploads/2017/05/dice_1.png',
@@ -83,6 +98,9 @@ def reply(bot, message, intent, entities):
         to_rate = data['rates'][to_currency]
         converted = round(amount*(to_rate/from_rate),2)
         bot.reply_to(message, converted)
+    elif intent == 'time':
+        time = datetime.datetime.utcnow()
+        bot.reply_to(message, 'The Coordinated Universal Time is '+ time.strftime("%I:%M:%S %p on %A, %d %b %Y."))
     elif intent == 'wiki':
         try:
             query = entities[0]['value']
