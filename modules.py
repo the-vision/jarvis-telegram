@@ -125,6 +125,19 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, data['definitions'][0]['definition'])
         else:
             bot.reply_to(message, data['message'])
+    elif intent == 'video':
+        try:
+            query = entities[0]['value']
+            response = requests.get('https://youtube-search1.p.rapidapi.com/' + query, headers={
+                'x-rapidapi-key': RAPID_API_KEY
+            })
+            data = response.json()
+            video = data['items'][0]
+            bot.send_photo(message.chat.id, video['thumbHigh'].split('?')[0], caption='*' +
+                           video['title'] + '*\n' + video['channelTitle'] + '\nDuration: ' + video['duration'] + '\n' + video['url'], parse_mode='Markdown')
+        except Exception as e:
+            print(e)
+            bot.reply_to(message, 'I could not fetch the video for you this time. Please try again later!')
     elif intent == 'anime':
         anime = entities[0]['value']
         response = requests.get('https://jikan1.p.rapidapi.com/search/anime', headers={
