@@ -87,6 +87,16 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, response.text)
         else:
             bot.reply_to(message, 'I could not fetch a fact for you this time. Please try again later!')
+    elif intent == 'news':
+        response = requests.get('https://covid-19-data.p.rapidapi.com/totals', headers={
+            'x-rapidapi-key': RAPID_API_KEY
+        })
+        data = response.json()
+        bot.reply_to(message, 'Here\'s the latest COVID-19 stats:' +
+                              '\nConfirmed: ' + str(data[0]['confirmed']) +
+                              '\nRecovered: ' + str(data[0]['recovered']) +
+                              '\nCritical: ' + str(data[0]['critical']) +
+                              '\nDeaths: ' + str(data[0]['deaths']))        
     elif intent == 'currency':
         try:
             amount = entities[0]['value']
@@ -168,6 +178,7 @@ def reply(bot, message, intent, entities):
 - cloud wiki
 - death note anime
 - 50 EUR to USD
+- latest news
 \nI'm always learning, so do come back and say hi from time to time! Have a nice day. 🙂"""
         bot.reply_to(message, help_message)
     else:
