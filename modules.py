@@ -8,7 +8,7 @@ import wikipedia
 import xkcd
 
 RAPID_API_KEY = os.environ.get('RAPID_API_KEY')
-YOUTUBE_DATA_API_KEY = os.environ.get('YOUTUBE_DATA_API_KEY')
+
 
 def reply(bot, message, intent, entities):
     if intent == 'xkcd':
@@ -91,18 +91,18 @@ def reply(bot, message, intent, entities):
         else:
             bot.reply_to(message, data['message'])
     elif intent == 'video':
-        search = entities[0]['search']
-        r = requests.get(
-                'https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=3&q=' + search + '&type=video&key=' + YOUTUBE_DATA_API_KEY)
-        data = r.json()
-        videos = [item for item in data['items'] if item['id']['kind'] == 'youtube#video']
-        for item in videos:
-            title = item['snippet']['title']
-            url = "https://www.youtube.com/watch?v="+item['id']['videoId']
-            url_to_image = item['snippet']['thumbnails']['high']['url']
-            bot.send_photo(message.chat.id, url_to_image, caption='*' +
-                            title + '*\n'  +
-                            '\n' +url, parse_mode='Markdown')
+        try:
+            query = entities[0]['value']
+            response = requests.get('https://youtube-search1.p.rapidapi.com/' + query, headers={
+                'x-rapidapi-key': RAPID_API_KEY
+            })
+            data = response.json()
+            video = data['items'][0]
+            bot.send_photo(message.chat.id, video['thumbHigh'].split('?')[0], caption='*' +
+                           video['title'] + '*\n' + video['channelTitle'] + '\nDuration: ' + video['duration'] + '\n' + video['url'], parse_mode='Markdown')
+        except Exception as e:
+            print(e)
+            bot.reply_to(message, 'I could not fetch the video for you this time. Please try again later!')
     elif intent == 'anime':
         anime = entities[0]['value']
         response = requests.get('https://jikan1.p.rapidapi.com/search/anime', headers={
