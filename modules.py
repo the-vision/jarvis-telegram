@@ -89,8 +89,8 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, 'I could not fetch a fact for you this time. Please try again later!')
     elif intent == 'news':
         response = requests.get('https://covid-19-data.p.rapidapi.com/totals', headers={
-                'x-rapidapi-key': RAPID_API_KEY
-            })
+            'x-rapidapi-key': RAPID_API_KEY
+        })
         data = response.json()
         bot.reply_to(message, 'Here\'s the latest COVID-19 stats:' +
                               '\nConfirmed: ' + str(data[0]['confirmed']) +
