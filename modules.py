@@ -1,5 +1,6 @@
 from telebot import types
 
+import datetime
 import os
 import pyjokes
 import random
@@ -53,6 +54,20 @@ def reply(bot, message, intent, entities):
         result = random.choice(['Heads', 'Tails'])
         bot.send_photo(message.chat.id, photo=coin_images[result],
                        reply_to_message_id=message.message_id)
+    elif intent == 'translate':
+        try:
+            text = entities[0]['value']
+            response = requests.post('https://google-translate1.p.rapidapi.com/language/translate/v2', headers={
+                'x-rapidapi-key': RAPID_API_KEY,
+                'accept-encoding': 'application/gzip',
+                'content-type': 'application/x-www-form-urlencoded'
+            }, data='source=en&q=' + text + '&target=es')
+            data = response.json()
+            print(data)
+            bot.reply_to(message, 'Here is the Spanish translation: ' + data['data']['translations'][0]['translatedText'])
+        except Exception as e:
+            print(e)
+            bot.reply_to(message, 'I could not fetch the translation for you this time. Please try again later!')
     elif intent == 'dice':
         dice_images = {
             '1': 'https://www.ssaurel.com/blog/wp-content/uploads/2017/05/dice_1.png',
@@ -86,6 +101,36 @@ def reply(bot, message, intent, entities):
             }
         response = requests.request("POST", url, data=payload, headers=headers)
         bot.reply_to(message, response.text['result'])
+    elif intent == 'news':
+        response = requests.get('https://covid-19-data.p.rapidapi.com/totals', headers={
+            'x-rapidapi-key': RAPID_API_KEY
+        })
+        data = response.json()
+        bot.reply_to(message, 'Here\'s the latest COVID-19 stats:' +
+                              '\nConfirmed: ' + str(data[0]['confirmed']) +
+                              '\nRecovered: ' + str(data[0]['recovered']) +
+                              '\nCritical: ' + str(data[0]['critical']) +
+                              '\nDeaths: ' + str(data[0]['deaths']))        
+    elif intent == 'currency':
+        try:
+            amount = entities[0]['value']
+            from_currency = entities[1]['value'].upper()
+            to_currency = entities[2]['value'].upper()
+            response = requests.get('https://currency23.p.rapidapi.com/exchange', headers={
+                'x-rapidapi-key': RAPID_API_KEY
+            }, params={
+                'int': amount,
+                'base': from_currency,
+                'to': to_currency
+            })
+            data = response.json()
+            bot.reply_to(message, amount + ' ' + from_currency + ' = ' + data['result']['data'][0]['calculatedstr'] + ' ' + to_currency)
+        except Exception as e:
+            print(e)
+            bot.reply_to(message, 'I could not convert the currency for you this time. Please try again later!')
+    elif intent == 'time':
+        time = datetime.datetime.utcnow()
+        bot.reply_to(message, 'The Coordinated Universal Time is '+ time.strftime("%I:%M:%S %p on %A, %d %b %Y."))
     elif intent == 'wiki':
         try:
             query = entities[0]['value']
@@ -104,6 +149,19 @@ def reply(bot, message, intent, entities):
             bot.reply_to(message, data['definitions'][0]['definition'])
         else:
             bot.reply_to(message, data['message'])
+    elif intent == 'video':
+        try:
+            query = entities[0]['value']
+            response = requests.get('https://youtube-search1.p.rapidapi.com/' + query, headers={
+                'x-rapidapi-key': RAPID_API_KEY
+            })
+            data = response.json()
+            video = data['items'][0]
+            bot.send_photo(message.chat.id, video['thumbHigh'].split('?')[0], caption='*' +
+                           video['title'] + '*\n' + video['channelTitle'] + '\nDuration: ' + video['duration'] + '\n' + video['url'], parse_mode='Markdown')
+        except Exception as e:
+            print(e)
+            bot.reply_to(message, 'I could not fetch the video for you this time. Please try again later!')
     elif intent == 'anime':
         anime = entities[0]['value']
         response = requests.get('https://jikan1.p.rapidapi.com/search/anime', headers={
@@ -133,6 +191,8 @@ def reply(bot, message, intent, entities):
 - define server
 - cloud wiki
 - death note anime
+- 50 EUR to USD
+- latest news
 \nI'm always learning, so do come back and say hi from time to time! Have a nice day. 🙂"""
         bot.reply_to(message, help_message)
     else:
