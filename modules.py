@@ -51,8 +51,10 @@ def reply(bot, message, intent, entities):
             'Tails': 'https://www.ssaurel.com/blog/wp-content/uploads/2017/01/tails.png'
         }
         result = random.choice(['Heads', 'Tails'])
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        markup.add(types.KeyboardButton('Flip again!'))
         bot.send_photo(message.chat.id, photo=coin_images[result],
-                       reply_to_message_id=message.message_id)
+                       reply_to_message_id=message.message_id, reply_markup=markup)
     elif intent == 'translate':
         try:
             text = entities[0]['value']
